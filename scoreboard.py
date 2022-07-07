@@ -16,7 +16,7 @@ class Scoreboard:
         self.ammo_count =self.settings.bullets_allowed
 
         # Font setting sfor scoring information.
-        self.text_colour = (30, 30, 30)
+        self.text_colour = ("#ffffff")
         self.font = pygame.font.SysFont(None, 48)
 
         # Prepare an initial score images.
