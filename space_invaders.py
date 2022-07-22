@@ -165,11 +165,12 @@ class SpaceInvaders:
             # Ensure that score is added for every alien hit.
             for alien in collisions.values():
                 self.stats.score += self.settings.alien_points * len(alien)
+                # Add bullets to the ammo counter, added here because otherwise the counter messes up if two
+                # aliens are hit at the same time.
+                self.sb.ammo_count += 1
             self.sb.prep_score()
             self.sb.check_high_score()
-
-            # Add bullets to the ammo counter.
-            self.sb.ammo_count += 1
+            # Update the ammo counter.
             self.sb.prep_ammo()
 
         # Check if there are any aliens left in the aliens sprite group.
@@ -180,10 +181,18 @@ class SpaceInvaders:
             self.stats.level += 1
             self.sb.prep_level()
 
+    def _reset_ammo_count(self):
+        """Reset the ammo counter to the maximum ammo count."""
+        self.sb.ammo_count = self.settings.bullets_allowed
+        self.sb.prep_ammo()
+
     def _new_wave(self):
         """Create a new wave of aliens with increased stats."""
-        # Destroy existing bullets and create new fleet with increased speed.
+        # Destroy existing bullets.
         self.bullets.empty()
+        # Reset the ammo counter in between waves.
+        self._reset_ammo_count()
+        # Create a new fleet with increased speed.
         self.settings.alien_speed += self.settings.alien_speed_increase
         # Increase the score value without adding a decimal to the scoreboard
         self.settings.alien_points = int(self.settings.alien_points * self.settings.score_increase)
